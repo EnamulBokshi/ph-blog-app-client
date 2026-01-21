@@ -2,15 +2,9 @@
 
 import * as React from "react"
 import {
-  AudioWaveform,
-  BookOpen,
   Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
+  DatabaseBackup,
+  LucideIcon,
   SquareTerminal,
 } from "lucide-react"
 
@@ -22,9 +16,11 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { adminRoutes } from "@/routes/adminRoutes"
+import { userRoutes } from "@/routes/userRoutes"
+import { Route } from "@/types"
 
 // This is sample data.
 const data = {
@@ -33,37 +29,21 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
+ 
   navMain: [
     {
-      title: "Playground",
+      title: "Blogs",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Write Blog",
+          url: "/dashboard/write-blog",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "View Blogs",
+          url: "/dashboard/view-blogs",
         },
         {
           title: "Settings",
@@ -91,80 +71,42 @@ const data = {
       ],
     },
     {
-      title: "Documentation",
+      title: "Analytics",
       url: "#",
-      icon: BookOpen,
+      icon: DatabaseBackup,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "View Stats",
+          url: "/dashboard/blogs-stats",
         },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
+        
       ],
     },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
+   
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
+ 
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({user, ...props }:{user:{role:string}} & React.ComponentProps<typeof Sidebar>) {
+
+let routes:Route[] = [];
+switch(user.role){
+  case "admin": 
+      routes = adminRoutes
+      break;
+  case "user":
+    routes = userRoutes;
+    break;
+  default:
+    routes = [];
+    break;
+}
+
+
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
-      </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavMain items={routes} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

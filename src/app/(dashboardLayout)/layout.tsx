@@ -1,22 +1,18 @@
 import { AppSidebar } from "@/components/layout/app-sidebar"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { UserRole } from "@/constants/user.role"
+import { userServices } from "@/services/user.service"
 
 
-export default function Page({admin, user} : {admin: React.ReactNode, user:  React.ReactNode}) {
-const userInfo = {role: "user"}
+export default async function Page({admin, user} : {admin: React.ReactNode, user:  React.ReactNode}) {
+  const {data}  = await userServices.getSession();
+
+const userInfo = data.user;
 
   return (
     <SidebarProvider>
@@ -29,23 +25,11 @@ const userInfo = {role: "user"}
               orientation="vertical"
               className="mr-2 data-[orientation=vertical]:h-4"
             />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-         {userInfo.role === "admin"? admin:user};
+         {userInfo.role === UserRole.admin? admin:user}
         </div>
       </SidebarInset>
     </SidebarProvider>

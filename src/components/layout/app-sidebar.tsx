@@ -21,6 +21,7 @@ import {
 import { adminRoutes } from "@/routes/adminRoutes"
 import { userRoutes } from "@/routes/userRoutes"
 import { Route } from "@/types"
+import { UserRole } from "@/constants/user.role"
 
 // This is sample data.
 const data = {
@@ -91,10 +92,10 @@ export function AppSidebar({user, ...props }:{user:{role:string}} & React.Compon
 
 let routes:Route[] = [];
 switch(user.role){
-  case "admin": 
+  case UserRole.admin: 
       routes = adminRoutes
       break;
-  case "user":
+  case UserRole.user:
     routes = userRoutes;
     break;
   default:

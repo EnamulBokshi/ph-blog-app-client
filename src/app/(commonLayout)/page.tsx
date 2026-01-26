@@ -15,8 +15,8 @@ export default async function Home() {
   */
 
   // TO get the user session, we have created a service 
-  const {data} = await userServices.getSession();
-  console.log("Session Data: ",data)
+  // const {data} = await userServices.getSession();
+  // // console.log("Session Data: ",data)
   return (
   <div>
     Home page

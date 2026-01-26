@@ -1,11 +1,12 @@
-import { authClient } from "@/lib/auth-client";
+import { env } from "@/env";
 import { cookies } from "next/headers"
 
+const authUrl = env.AUTH_URL;
 export const userServices = {
     getSession: async()=>{
         try {
             const cookieStore = await cookies();
-            const res = await fetch(`${process.env.AUTH_URL}/get-session`, {
+            const res = await fetch(`${authUrl}/get-session`, {
                 headers: {
                  Cookie: cookieStore.toString()   
                 },
@@ -13,7 +14,6 @@ export const userServices = {
             },
            
         )
-        console.log(res)
          const session = await res.json();
          if(!session){
             throw new Error('Session not found!');

@@ -1,23 +1,18 @@
 "use client";
 
-import { Book, Menu, Sunset, Trees, Zap } from "lucide-react";
+import {  Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 import {
   Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import {
   Sheet,
@@ -57,6 +52,7 @@ interface Navbar1Props {
       url: string;
     };
   };
+  isLoggedIn: boolean;
 }
 
 const Navbar = ({
@@ -64,14 +60,14 @@ const Navbar = ({
     url: "https://www.shadcnblocks.com",
     src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
     alt: "logo",
-    title: "Shadcnblocks.com",
+    title: "Prisma Blog App",
   },
   menu = [
-    { title: "Home", url: "#" },
+    { title: "Home", url: "/" },
     
     {
-      title: "Blog",
-      url: "/blog",
+      title: "Blogs",
+      url: "/blogs",
     },
 
     {
@@ -84,6 +80,7 @@ const Navbar = ({
     signup: { title: "Sign up", url: "/signup" },
   },
   className,
+  isLoggedIn=false
 }: Navbar1Props) => {
   return (
     <section className={cn("py-4", className)}>
@@ -110,14 +107,30 @@ const Navbar = ({
               </NavigationMenu>
             </div>
           </div>
+          {/* // auth - login/signup/logout */}
+          
+          
           <div className="flex gap-2">
             <ModeToggle />
-            <Button asChild variant="outline" size="sm">
-              <a href={auth.login.url}>{auth.login.title}</a>
+            {
+              isLoggedIn? (
+              <>
+              <Button asChild variant="outline" size="sm">
+              <Link href={"#"}>{"Logout"}</Link>
+            </Button>
+              </>
+            ) : (
+            <div className="flex gap-2"> 
+                <Button asChild variant="outline" size="sm">
+              <Link href={auth.login.url}>{auth.login.title}</Link>
             </Button>
             <Button asChild size="sm">
-              <a href={auth.signup.url}>{auth.signup.title}</a>
+              <Link href={auth.signup.url}>{auth.signup.title}</Link>
             </Button>
+              </div>)
+
+
+            }
           </div>
         </nav>
 
@@ -158,7 +171,8 @@ const Navbar = ({
                   >
                     {menu.map((item) => renderMobileMenuItem(item))}
                   </Accordion>
-
+                
+                {/* // auth - login/signup */}
                   <div className="flex flex-col gap-3">
                     <ModeToggle />
                     <Button asChild variant="outline">
